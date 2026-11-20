@@ -116,20 +116,33 @@ public class AuthenticationController {
                 return new ResponseEntity<>
                 ("Sign in successfully!", HttpStatus.OK);
         }
-
+    
+    /**
+     * Logs out the user from its session
+     */
     @PostMapping ("/auth_login_session")
-    public ResponseEntity<?> loginWithSession(@RequestBody AuthLoginDto authLoginDto, HttpServletRequest request) {
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authLoginDto.getUsername(), authLoginDto.getPassword()));
+    public ResponseEntity<?> loginWithSession
+    (@RequestBody AuthLoginDto authLoginDto, HttpServletRequest request) {
+        Authentication authentication = authenticationManager.authenticate
+        (new UsernamePasswordAuthenticationToken
+            (authLoginDto.getUsername(), authLoginDto.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         HttpSession session = request.getSession(true);
-        session.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
+        session.setAttribute
+        ("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
 
         Map<String, String> response = new HashMap<>();
-        response.put("message", "Authenticated successfully via session cookie.");
+        response.put
+        ("message", "Authenticated successfully via session cookie.");
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Logs out the user from its session and invalidates it, 
+     * meaning a used session that was just terminated cannot be 
+     * used again even after log out requiring the user to log in again.
+     */
     @PostMapping ("/logout")
     public ResponseEntity<String> logout(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
@@ -138,6 +151,7 @@ public class AuthenticationController {
         }
 
         SecurityContextHolder.clearContext();
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Logged out from session container");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+        .body("Logged out from session container");
     }
 }

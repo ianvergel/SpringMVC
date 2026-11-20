@@ -73,9 +73,9 @@ public class SecurityConfig {
     }
 
     /**
-     * Defines the security filter chain: disables CSRF, 
+     * Defines the security filter chain: cors, disables CSRF, 
      * allows public access to auth endpoints, secures all other routes, 
-     * and enables HTTP Basic authentication.
+     * allows permitted methods and enables HTTP Basic authentication.
      */
     @Bean 
     SecurityFilterChain filterChain(HttpSecurity security)
@@ -87,26 +87,34 @@ public class SecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
             )
             .authorizeHttpRequests(auth -> auth
-                                    .requestMatchers("/api/auth/**").permitAll()
-                                    .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                                    .requestMatchers("/api/students/**").hasAnyAuthority("USER", "ADMIN")
-                                    .anyRequest().authenticated()
-                                    )
+                .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                .requestMatchers("/api/students/**")
+                .hasAnyAuthority("USER", "ADMIN")
+                .anyRequest().authenticated()
+                )
             .httpBasic(Customizer.withDefaults())
             .build();
     }
 
+    /**
+     * Defines configurations such as the url origins, 
+     * method, headers, and credentials only allowed
+     */
     @Bean 
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000",
-                                                        "http://127.0.0.1:3000"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
+        configuration.setAllowedOrigins
+        (Arrays.asList("http://localhost:3000", "http://127.0.0.1:3000"));
+        configuration.setAllowedMethods
+        (Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders
+        (Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
         configuration.setAllowCredentials(true);
 
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        UrlBasedCorsConfigurationSource 
+        source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }

@@ -9,6 +9,7 @@ function validateStudentForm() {
   const lastNameError = document.getElementById("lastNameError");
   const emailError = document.getElementById("emailError");
 
+  clearValidationStyles();
   if (firstName.value.trim() === "") {
     firstNameError.textContent = "First name is required!";
     firstName.classList.add("invalid");
@@ -33,15 +34,25 @@ function validateStudentForm() {
   const emailValue = email.value.trim();
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-  if (email.value.trim() === "") {
+  if (emailValue === "") {
     emailError.textContent = "Email address is required!";
     email.classList.add("invalid");
     isValid = false;
   } else if (!emailRegex.test(emailValue)) {
-    lastNameError.textContent =
+    emailError.textContent =
       "Please enter a valid email address (e.g., student@example.com)";
-    lastName.classList.add("invalid");
+    email.classList.add("invalid");
     isValid = false;
   }
   return isValid;
+}
+
+function clearValidationStyles() {
+  const fields = ["firstName", "lastName", "email"];
+  fields.forEach((fieldId) => {
+    const element = document.getElementById(fieldId);
+    const errorSpan = document.getElementById(`${fieldId}Error`);
+    if (element) element.classList.remove("invalid");
+    if (errorSpan) errorSpan.textContent = "";
+  });
 }

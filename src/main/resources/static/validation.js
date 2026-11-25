@@ -1,3 +1,7 @@
+/**
+ * Checks and validates the input in the form if it followed
+ *  the required length and format.
+ */
 function validateStudentForm() {
   let isValid = true;
 
@@ -47,6 +51,11 @@ function validateStudentForm() {
   return isValid;
 }
 
+/**
+ * Clears validation messages for those inputs that already follows the
+ * required lenght or format allowing validations to be present on 
+ * inputs with errors only.
+ */
 function clearValidationStyles() {
   const fields = ["firstName", "lastName", "email"];
   fields.forEach((fieldId) => {

@@ -28,6 +28,10 @@ async function createStudent(studentData) {
   }
 }
 
+/**
+ * Creates an event listener for the student form 
+ * fetching the inputs to be validated.
+ */
 document.getElementById("studentForm").addEventListener
 ("submit", function (e) {
   e.preventDefault();
